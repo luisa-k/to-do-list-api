@@ -168,6 +168,10 @@ app.put("/changetask", function (req, res) {
     query["duedate"] = req.body.duedate;
   }
 
+  if (req.body.done || req.body.done === false) {
+    query["done"] = req.body.done;
+  }
+
   db("tasks")
     .where("id", "=", req.body.id)
     .update(query)
