@@ -45,12 +45,13 @@ function jwtGenerator(user_id) {
 app.use(async function (req, res, next) {
   if (req.originalUrl === "/signin") {
     next();
+  } else if (req.originalUrl === "/register") {
+    next();
   } else {
     const jwtToken = req.cookies.webtoken;
     if (jwtToken) {
       try {
         const verifyToken = await jwt.verify(jwtToken, "supersecret123");
-        console.log("verifyToken:", verifyToken);
 
         if (verifyToken) {
           req.user_data = verifyToken;
@@ -122,6 +123,9 @@ app.post("/register", function (req, res) {
           })
           .then((user) => {
             const token = jwtGenerator(user[0].id);
+            res.cookie("webtoken", token, {
+              expires: new Date(Date.now() + 8 * 3600000),
+            });
             res.json({ token: token, user: user });
           });
       })
@@ -166,6 +170,10 @@ app.put("/changetask", function (req, res) {
 
   if (req.body.duedate) {
     query["duedate"] = req.body.duedate;
+  }
+
+  if (req.body.time) {
+    query["time"] = req.body.time;
   }
 
   if (req.body.done || req.body.done === false) {
