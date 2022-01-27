@@ -28,7 +28,7 @@ const db = knex({
     host: "127.0.0.1",
     user: "todolist",
     password: "test",
-    database: "to-do-list",
+    database: "todolist",
   },
 });
 
